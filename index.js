@@ -134,7 +134,15 @@ function calculate() {
 }
 
 // Event listener for the calculate button
-document.getElementById("calculate").addEventListener("click", () => {
+// document.getElementById("calculate").addEventListener("click", () => {
+//   calculate();
+// });
+
+document.getElementById("paellaSize").addEventListener("change", () => {
+  calculate();
+});
+
+document.getElementById("persons").addEventListener("change", () => {
   calculate();
 });
 
