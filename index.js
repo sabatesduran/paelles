@@ -62,22 +62,30 @@ function calculateIngredients(panSize, numPeople) {
         quantity = (quantity / 6) * numPeople;
       }
 
-      // If it's in grams and more than 1000, convert to kilograms
-      if (ingredient === "arros" && quantity >= 1000) {
-        quantity = (quantity / 1000).toFixed(2) + " kg";
-      } else if (ingredient !== "fumet_de_peix" && quantity % 1 !== 0) {
-        // If it's units and has a decimal, round up
-        quantity = Math.ceil(quantity) + " unitats";
-      } else if (ingredient === "fumet_de_peix") {
-        quantity = quantity.toFixed(2) + " litres";
+      // Define a helper function to determine the correct unit based on the quantity
+      const unit = (qty, single, plural) => (qty === 1 ? single : plural);
+
+      // Special handling for specific ingredients
+      if (ingredient === "arros") {
+        if (quantity >= 1000) {
+          quantity = (quantity / 1000).toFixed(2) + " kg";
+        } else {
+          quantity =
+            Math.round(quantity) + " " + unit(quantity, "gram", "grams");
+        }
       } else if (ingredient === "pimenton_dulce") {
-        quantity = quantity + " cullerades de postre";
-      } else if (ingredient === "zafrà") {
-        quantity = quantity + " infusions";
-      } else {
         quantity =
           Math.round(quantity) +
-          (ingredient === "arros" ? " grams" : " unitats");
+          " " +
+          unit(quantity, "cullerada de postre", "cullerades de postre");
+      } else if (ingredient === "zafrà") {
+        quantity =
+          Math.round(quantity) + " " + unit(quantity, "infusió", "infusions");
+      } else if (ingredient === "fumet_de_peix") {
+        quantity = quantity.toFixed(2) + " litres";
+      } else {
+        quantity = Math.round(quantity);
+        quantity += " " + unit(quantity, "unitat", "unitats");
       }
     } else {
       // For 'Al gust' ingredients, we don't need to calculate quantities
