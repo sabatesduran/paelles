@@ -22,6 +22,22 @@ const originalRecipe = {
   sal: "Al gust", // to taste
 };
 
+const ingredientEmojis = {
+  Arros: "🌾",
+  "Fumet de peix": "🐟",
+  "Calamar gran": "🦑",
+  "Sipia gran": "🦑",
+  Gambons: "🦐",
+  Nyora: "🌶️",
+  "Ceba morada": "🧅",
+  "Tomaquet de pera madur": "🍅",
+  Alls: "🧄",
+  "Pebre vermell dolç": "🌶️",
+  Zafrà: "🌼",
+  Oli: "🫒",
+  Sal: "🧂",
+};
+
 function sanitizeIngredientName(ingredientName) {
   return (
     ingredientName
@@ -132,10 +148,21 @@ function calculate() {
   }
 }
 
-// Event listener for the calculate button
-// document.getElementById("calculate").addEventListener("click", () => {
-//   calculate();
-// });
+function shareText(panSize, numPeople) {
+  const ingredients = calculateIngredients(panSize, numPeople);
+  let recipeText = `🥘 Paella de marisc:\n
+Persones: ${numPeople}
+Mida paella: ${panSize} cm:\n
+Ingredients:\n`;
+  Object.keys(ingredients).forEach((key) => {
+    recipeText += `${ingredientEmojis[key] || "🥘"} ${key}: ${
+      ingredients[key]
+    }\n`;
+  });
+  return recipeText.trim();
+}
+
+// Event listeners
 
 document.getElementById("paellaSize").addEventListener("change", () => {
   calculate();
@@ -143,6 +170,37 @@ document.getElementById("paellaSize").addEventListener("change", () => {
 
 document.getElementById("persons").addEventListener("change", () => {
   calculate();
+});
+
+document.getElementById("shareButton").addEventListener("click", function () {
+  const panSize = document.getElementById("paellaSize").value;
+  const numPeople = parseInt(document.getElementById("persons").value, 10);
+  const recipeText = shareText(panSize, numPeople);
+
+  if (navigator.share) {
+    navigator
+      .share({
+        title: "Calculadora de Paella de marisc",
+        text: recipeText,
+      })
+      .then(() => {
+        alert("Contingut compartit!");
+      })
+      .catch((error) => {
+        console.error("Error sharing:", error);
+        alert("Error compartint el contingut.");
+      });
+  } else {
+    navigator.clipboard
+      .writeText(recipeText)
+      .then(() => {
+        alert("Copiat al porta-retalls!");
+      })
+      .catch((error) => {
+        console.error("Error copying text:", error);
+        alert("Error copiant al porta-retalls.");
+      });
+  }
 });
 
 // Initial calculation
