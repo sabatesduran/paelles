@@ -9,15 +9,14 @@ const ratios = {
 const originalRecipe = {
   arros: 600, // in grams
   fumet_de_peix: 1, // in liters
-  cua_de_rap: 1, // in units
   calamar_gran: 1, // in units
-  sepia_gran: 1, // in units
+  sipia_gran: 1, // in units
   gambons: 12, // in units
   nyora: 1, // in units
   ceba_de_figueres: 1, // in units
   tomàquet_de_pera_madur: 3, // in units
   grills_all: 2, // in units
-  pimenton_dulce: 1, // in dessertspoon
+  pebre_vermell_dolç: 1, // in dessertspoon
   zafrà: 1, // in infusion packet or pinch
   oli: "Al gust", // to taste
   sal: "Al gust", // to taste
