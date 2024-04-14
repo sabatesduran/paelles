@@ -190,9 +190,6 @@ document.getElementById("shareButton").addEventListener("click", function () {
         title: "Calculadora de Paella de marisc",
         text: recipeText,
       })
-      .then(() => {
-        alert("Contingut compartit!");
-      })
       .catch((error) => {
         console.error("Error sharing:", error);
         alert("Error compartint el contingut.");
