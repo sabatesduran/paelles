@@ -52,7 +52,7 @@ function calculateIngredients(panSize, numPeople) {
   const ingredients = {};
 
   // Calculate the amount of rice for the number of people
-  const ricePerPerson = originalRecipe["arros"] / 6;
+  const ricePerPerson = originalRecipe.arros / 6;
   const totalRice = ricePerPerson * numPeople;
 
   // Convert the total rice in grams to kilograms for the ratio calculation
@@ -83,24 +83,22 @@ function calculateIngredients(panSize, numPeople) {
       // Special handling for specific ingredients
       if (ingredient === "arros") {
         if (quantity >= 1000) {
-          quantity = (quantity / 1000).toFixed(2) + " kg";
+          quantity = `${(quantity / 1000).toFixed(2)} kg`;
         } else {
           quantity =
-            Math.round(quantity) + " " + unit(quantity, "gram", "grams");
+            `${Math.round(quantity)} ${unit(quantity, "gram", "grams")}`;
         }
       } else if (ingredient === "pimenton_dulce") {
         quantity =
-          Math.round(quantity) +
-          " " +
-          unit(quantity, "cullerada de postre", "cullerades de postre");
+          `${Math.round(quantity)} ${unit(quantity, "cullerada de postre", "cullerades de postre")}`;
       } else if (ingredient === "zafrà") {
         quantity =
-          Math.round(quantity) + " " + unit(quantity, "infusió", "infusions");
+          `${Math.round(quantity)} ${unit(quantity, "infusió", "infusions")}`;
       } else if (ingredient === "fumet_de_peix") {
-        quantity = quantity.toFixed(2) + " litres";
+        quantity = `${quantity.toFixed(2)} litres`;
       } else {
         quantity = Math.round(quantity);
-        quantity += " " + unit(quantity, "unitat", "unitats");
+        quantity += ` ${unit(quantity, "unitat", "unitats")}`;
       }
     } else {
       // For 'Al gust' ingredients, we don't need to calculate quantities
@@ -115,7 +113,7 @@ function calculateIngredients(panSize, numPeople) {
 
 function calculate() {
   const panSize = document.getElementById("paellaSize").value;
-  const numPeople = parseInt(document.getElementById("persons").value, 10);
+  const numPeople = Number.parseInt(document.getElementById("persons").value, 10);
 
   // Perform the calculation
   const recipe = calculateIngredients(panSize, numPeople);
@@ -154,15 +152,16 @@ function shareText(panSize, numPeople) {
 Persones: ${numPeople}
 Mida paella: ${panSize} cm:\n
 Ingredients:\n`;
-  Object.keys(ingredients).forEach((key) => {
-    recipeText += `${ingredientEmojis[key] || "🥘"} ${key}: ${
-      ingredients[key]
-    }\n`;
-  });
+  const ingridients = Object.keys(ingredients)
+    .map(
+      (key) => `${ingredientEmojis[key] || "🥘"} ${key}: ${ingredients[key]}`
+    )
+    .join("\n");
+  recipeText += ingridients;
 
   recipeText += "\n👩‍🍳 Bon profit!";
-  let baseURL = "https://paelles.vercel.app/";
-  let queryParams = `persones=${numPeople}&mida_paella=${panSize}`;
+  const baseURL = "https://paelles.vercel.app/";
+  const queryParams = `persones=${numPeople}&mida_paella=${panSize}`;
 
   recipeText += `\n\nGenerat amb ${baseURL}?${queryParams}`;
 
@@ -179,9 +178,12 @@ document.getElementById("persons").addEventListener("change", () => {
   calculate();
 });
 
-document.getElementById("shareButton").addEventListener("click", function () {
+document.getElementById("shareButton").addEventListener("click", () => {
   const panSize = document.getElementById("paellaSize").value;
-  const numPeople = parseInt(document.getElementById("persons").value, 10);
+  const numPeople = Number.parseInt(
+    document.getElementById("persons").value,
+    10
+  );
   const recipeText = shareText(panSize, numPeople);
 
   if (navigator.share) {
@@ -206,7 +208,7 @@ document.getElementById("shareButton").addEventListener("click", function () {
   }
 });
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
   const validPanSizes = ["70", "60", "50"]; // List of valid pan sizes
   const defaultPanSize = "70"; // Default pan size
   const defaultNumPeople = 6; // Default number of people
@@ -232,4 +234,3 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initial calculation
   calculate();
 });
-
