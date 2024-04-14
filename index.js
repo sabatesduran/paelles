@@ -159,6 +159,13 @@ Ingredients:\n`;
       ingredients[key]
     }\n`;
   });
+
+  recipeText += "\n👩‍🍳 Bon profit!";
+  let baseURL = "https://paelles.vercel.app/";
+  let queryParams = `persones=${numPeople}&mida_paella=${panSize}`;
+
+  recipeText += `\n\nGenerat amb ${baseURL}?${queryParams}`;
+
   return recipeText.trim();
 }
 
@@ -203,5 +210,30 @@ document.getElementById("shareButton").addEventListener("click", function () {
   }
 });
 
-// Initial calculation
-calculate();
+document.addEventListener("DOMContentLoaded", function () {
+  const validPanSizes = ["70", "60", "50"]; // List of valid pan sizes
+  const defaultPanSize = "70"; // Default pan size
+  const defaultNumPeople = 6; // Default number of people
+
+  // Function to get parameters from URL or set to default
+  function getQueryParam(param, defaultValue, validValues = null) {
+    const urlParams = new URLSearchParams(window.location.search);
+    let value = urlParams.get(param);
+    if (validValues && !validValues.includes(value)) {
+      value = defaultValue;
+    }
+    return value || defaultValue;
+  }
+
+  // Get pan size and number of people from URL with validation
+  const panSize = getQueryParam("mida_paella", defaultPanSize, validPanSizes);
+  const numPeople = getQueryParam("persones", defaultNumPeople);
+
+  // Set the form inputs
+  document.getElementById("paellaSize").value = panSize;
+  document.getElementById("persons").value = numPeople;
+
+  // Initial calculation
+  calculate();
+});
+
