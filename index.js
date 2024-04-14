@@ -192,7 +192,6 @@ document.getElementById("shareButton").addEventListener("click", function () {
       })
       .catch((error) => {
         console.error("Error sharing:", error);
-        alert("Error compartint el contingut.");
       });
   } else {
     navigator.clipboard
