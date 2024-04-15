@@ -7,35 +7,39 @@ const ratios = {
 
 // Original recipe quantities for 6 people
 const originalRecipe = {
-  arros: 600, // in grams
+  arròs: 600, // in grams
   fumet_de_peix: 1, // in liters
   calamar_gran: 1, // in units
   sipia_gran: 1, // in units
   gambons: 12, // in units
+  escopinyes: 200, // in grams
+  cloïsses: 200, // in grams
   nyora: 1, // in units
   ceba_de_figueres: 1, // in units
   tomàquet_de_pera_madur: 3, // in units
-  grills_all: 2, // in units
-  pebre_vermell_dolç: 1, // in dessertspoon
+  "grills_d'all": 2, // in units
+  pebre_vermell_dolç: 1, // in dessert spoon
   zafrà: 1, // in infusion packet or pinch
   oli: "Al gust", // to taste
   sal: "Al gust", // to taste
 };
 
 const ingredientEmojis = {
-  Arros: "🌾",
+  Arròs: "🌾",
   "Fumet de peix": "🐟",
   "Calamar gran": "🦑",
   "Sipia gran": "🦑",
   Gambons: "🦐",
   Nyora: "🌶️",
-  "Ceba morada": "🧅",
-  "Tomaquet de pera madur": "🍅",
-  Alls: "🧄",
+  "Ceba de figueres": "🧅",
+  "Tomàquet de pera madur": "🍅",
+  "Grills d'all": "🧄",
   "Pebre vermell dolç": "🌶️",
   Zafrà: "🌼",
   Oli: "🫒",
   Sal: "🧂",
+  Escopinyes: "🐚",
+  Cloïsses: "🐚",
 };
 
 function sanitizeIngredientName(ingredientName) {
@@ -52,7 +56,7 @@ function calculateIngredients(panSize, numPeople) {
   const ingredients = {};
 
   // Calculate the amount of rice for the number of people
-  const ricePerPerson = originalRecipe.arros / 6;
+  const ricePerPerson = originalRecipe.arròs / 6;
   const totalRice = ricePerPerson * numPeople;
 
   // Convert the total rice in grams to kilograms for the ratio calculation
@@ -69,7 +73,7 @@ function calculateIngredients(panSize, numPeople) {
     let quantity = originalRecipe[ingredient];
 
     if (typeof quantity === "number") {
-      if (ingredient === "arros") {
+      if (ingredient === "arròs") {
         quantity = totalRice;
       } else if (ingredient === "fumet_de_peix") {
         quantity = totalFumet;
@@ -81,19 +85,28 @@ function calculateIngredients(panSize, numPeople) {
       const unit = (qty, single, plural) => (qty === 1 ? single : plural);
 
       // Special handling for specific ingredients
-      if (ingredient === "arros") {
+      if (["arròs", "escopinyes", "cloïsses"].includes(ingredient)) {
         if (quantity >= 1000) {
           quantity = `${(quantity / 1000).toFixed(2)} kg`;
         } else {
-          quantity =
-            `${Math.round(quantity)} ${unit(quantity, "gram", "grams")}`;
+          quantity = `${Math.round(quantity)} ${unit(
+            quantity,
+            "gram",
+            "grams"
+          )}`;
         }
       } else if (ingredient === "pimenton_dulce") {
-        quantity =
-          `${Math.round(quantity)} ${unit(quantity, "cullerada de postre", "cullerades de postre")}`;
+        quantity = `${Math.round(quantity)} ${unit(
+          quantity,
+          "cullerada de postre",
+          "cullerades de postre"
+        )}`;
       } else if (ingredient === "zafrà") {
-        quantity =
-          `${Math.round(quantity)} ${unit(quantity, "infusió", "infusions")}`;
+        quantity = `${Math.round(quantity)} ${unit(
+          quantity,
+          "infusió",
+          "infusions"
+        )}`;
       } else if (ingredient === "fumet_de_peix") {
         quantity = `${quantity.toFixed(2)} litres`;
       } else {
@@ -113,7 +126,10 @@ function calculateIngredients(panSize, numPeople) {
 
 function calculate() {
   const panSize = document.getElementById("paellaSize").value;
-  const numPeople = Number.parseInt(document.getElementById("persons").value, 10);
+  const numPeople = Number.parseInt(
+    document.getElementById("persons").value,
+    10
+  );
 
   // Perform the calculation
   const recipe = calculateIngredients(panSize, numPeople);
@@ -148,9 +164,9 @@ function calculate() {
 
 function shareText(panSize, numPeople) {
   const ingredients = calculateIngredients(panSize, numPeople);
-  let recipeText = `🥘 Paella de marisc:\n
+  let recipeText = `🥘 Paella de marisc 🥘\n
 Persones: ${numPeople}
-Mida paella: ${panSize} cm:\n
+Mida de la paella: ${panSize} cm\n
 Ingredients:\n`;
   const ingridients = Object.keys(ingredients)
     .map(
@@ -159,11 +175,10 @@ Ingredients:\n`;
     .join("\n");
   recipeText += ingridients;
 
-  recipeText += "\n👩‍🍳 Bon profit!";
-  const baseURL = "https://paelles.vercel.app/";
-  const queryParams = `persones=${numPeople}&mida_paella=${panSize}`;
+  recipeText += "\n\n👩‍🍳 Bon profit!";
+  const baseURL = "https://paelles.vercel.app?p=${numPeople}&mp=${panSize}";
 
-  recipeText += `\n\nGenerat amb ${baseURL}?${queryParams}`;
+  recipeText += `\n\nGenerat amb ${baseURL}`;
 
   return recipeText.trim();
 }
@@ -224,8 +239,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Get pan size and number of people from URL with validation
-  const panSize = getQueryParam("mida_paella", defaultPanSize, validPanSizes);
-  const numPeople = getQueryParam("persones", defaultNumPeople);
+  const panSize = getQueryParam("mp", defaultPanSize, validPanSizes);
+  const numPeople = getQueryParam("p", defaultNumPeople);
 
   // Set the form inputs
   document.getElementById("paellaSize").value = panSize;
