@@ -4,9 +4,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon">
+<link rel="icon" href="/images/favicon.png" type="image/x-icon">
 <title>Calculadora de Paella de marisc</title>
 <!-- Tailwind CSS -->
-<script src="https://cdn.tailwindcss.com"></script>
+<link href="./css/tailwind.output.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
 
@@ -15,7 +17,7 @@
   <div class="flex align-center justify-between gap-3">
 
     <div class="w-100 w-full">
-      <label for="paellaSize" class="block mb-2 text-sm font-medium font-semibold text-gray-700">Mida de la paellera:</label>
+      <label for="paellaSize" class="block mb-2 text-sm font-medium text-gray-700">Mida de la paellera:</label>
       <select id="paellaSize" name="paellaSize" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 h-10">
         <option value="70">70 cm</option>
         <option value="60">60 cm</option>
@@ -24,7 +26,7 @@
     </div>
 
     <div class="w-full">
-      <label for="persons" class="block mb-2 text-sm font-medium font-semibold text-gray-700">Persones:</label>
+      <label for="persons" class="block mb-2 text-sm font-medium text-gray-700">Persones:</label>
       <input type="number" id="persons" name="persons" min="6" value="6" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 h-10" />
     </div>
   </div>
@@ -34,7 +36,7 @@
     <div class="flex items-center justify-between mb-4">
       <h2 class="text-xl sm:text-2xl font-semibold text-gray-800">Ingredients</h2>
       <span id="shareButton" class="cursor-pointer">
-        <img src="share-icon.svg" alt="icona de comparteix" width="35px">
+        <img src="images/share-icon.svg" alt="icona de comparteix" width="35px">
       </span>
     </div>
     <ul id="recipeList" class="space-y-2 pb-50">
