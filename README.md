@@ -15,3 +15,5 @@ bun start
 ```
 
 Aneu a [http://localhost:3000](http://localhost:3000) per veure la pàgina web.
+
+Testing
