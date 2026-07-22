@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "start": "bun run serve & bunx tailwindcss -i ./css/tailwind.css -o ./css/tailwind.output.css --watch",
-    "build": "bunx tailwindcss -i ./css/tailwind.css -o ./css/tailwind.output.css"
+    "build": "bunx tailwindcss -i ./css/tailwind.css -o ./css/tailwind.output.css",
+    "test": "node test-measures.js"
   },
   "dependencies": {},
   "devDependencies": {

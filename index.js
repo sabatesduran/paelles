@@ -28,18 +28,52 @@ const ingredientEmojis = {
 const numberFormat = new Intl.NumberFormat("ca-ES", { maximumFractionDigits: 2 });
 const plural = (quantity, singular, multiple) => (quantity === 1 ? singular : multiple);
 const displayName = (name) => name.replace(/_/g, " ").replace("d all", "d'all").replace(/^./, (letter) => letter.toUpperCase());
+const wholeIngredients = {
+  calamar_gran: ["calamar gran", "calamars grans"],
+  sipia_gran: ["sípia gran", "sípies grans"],
+  gambons: ["gambó", "gambons"],
+  nyora: ["nyora", "nyores"],
+  grills_d_all: ["grill d'all", "grills d'all"],
+};
+const halfIngredients = {
+  ceba_de_figueres: ["ceba de Figueres", "cebes de Figueres"],
+  tomàquet_de_pera_madur: ["tomàquet de pera madur", "tomàquets de pera madurs"],
+};
+
+function formatHalves(quantity) {
+  const rounded = Math.round(quantity * 2) / 2;
+  return rounded % 1 === 0.5 ? `${Math.floor(rounded) || ""}½` : numberFormat.format(rounded);
+}
 
 function formatIngredient(name, quantity) {
   if (typeof quantity !== "number") return "Al gust";
 
   if (["arròs", "escopinyes", "cloïsses"].includes(name)) {
-    return quantity >= 1000
-      ? `${numberFormat.format(quantity / 1000)} kg`
-      : `${numberFormat.format(Math.round(quantity))} ${plural(Math.round(quantity), "gram", "grams")}`;
+    const grams = Math.round(quantity / 25) * 25;
+    return grams >= 1000
+      ? `${numberFormat.format(grams / 1000)} kg`
+      : `${numberFormat.format(grams)} ${plural(grams, "gram", "grams")}`;
   }
-  if (name === "fumet_de_peix") return `${numberFormat.format(quantity)} litres`;
-  if (name === "pebre_vermell_dolç") return `${numberFormat.format(quantity)} ${plural(quantity, "cullerada de postres", "cullerades de postres")}`;
-  if (name === "zafrà") return `${numberFormat.format(quantity)} ${plural(quantity, "infusió", "infusions")}`;
+  if (name === "fumet_de_peix") {
+    const litres = Math.round(quantity * 10) / 10;
+    return `${numberFormat.format(litres)} ${plural(litres, "litre", "litres")}`;
+  }
+  if (wholeIngredients[name]) {
+    const units = Math.ceil(quantity);
+    return `${units} ${plural(units, ...wholeIngredients[name])}`;
+  }
+  if (halfIngredients[name]) {
+    const units = Math.round(quantity * 2) / 2;
+    return `${formatHalves(units)} ${plural(units, ...halfIngredients[name])}`;
+  }
+  if (name === "pebre_vermell_dolç") {
+    const spoons = Math.round(quantity * 2) / 2;
+    return `${formatHalves(spoons)} ${plural(spoons, "cullerada de postres", "cullerades de postres")}`;
+  }
+  if (name === "zafrà") {
+    const pinches = Math.round(quantity * 2) / 2;
+    return `${formatHalves(pinches)} ${plural(pinches, "pessic", "pessics")}`;
+  }
   return `${numberFormat.format(quantity)} ${plural(quantity, "unitat", "unitats")}`;
 }
 
@@ -128,16 +162,21 @@ async function shareRecipe() {
   window.setTimeout(() => { label.textContent = "Compartir compra"; }, 1800);
 }
 
-document.getElementById("paellaSize").addEventListener("change", calculate);
-document.getElementById("persons").addEventListener("change", calculate);
-document.getElementById("decreasePersons").addEventListener("click", () => { document.getElementById("persons").value = selectedPeople() - 1; calculate(); });
-document.getElementById("increasePersons").addEventListener("click", () => { document.getElementById("persons").value = selectedPeople() + 1; calculate(); });
-document.querySelectorAll(".person-preset").forEach((button) => button.addEventListener("click", () => { document.getElementById("persons").value = button.dataset.persons; calculate(); }));
-document.querySelectorAll(".pan-option").forEach((button) => button.addEventListener("click", () => { document.getElementById("paellaSize").value = button.dataset.size; calculate(); }));
-document.getElementById("shareButton").addEventListener("click", () => { shareRecipe().catch(() => { document.getElementById("shareLabel").textContent = "No s'ha pogut compartir"; }); });
+function initialize() {
+  document.getElementById("paellaSize").addEventListener("change", calculate);
+  document.getElementById("persons").addEventListener("change", calculate);
+  document.getElementById("decreasePersons").addEventListener("click", () => { document.getElementById("persons").value = selectedPeople() - 1; calculate(); });
+  document.getElementById("increasePersons").addEventListener("click", () => { document.getElementById("persons").value = selectedPeople() + 1; calculate(); });
+  document.querySelectorAll(".person-preset").forEach((button) => button.addEventListener("click", () => { document.getElementById("persons").value = button.dataset.persons; calculate(); }));
+  document.querySelectorAll(".pan-option").forEach((button) => button.addEventListener("click", () => { document.getElementById("paellaSize").value = button.dataset.size; calculate(); }));
+  document.getElementById("shareButton").addEventListener("click", () => { shareRecipe().catch(() => { document.getElementById("shareLabel").textContent = "No s'ha pogut compartir"; }); });
 
-const params = new URLSearchParams(window.location.search);
-const panSize = ratios[params.get("mp")] ? params.get("mp") : "70";
-document.getElementById("paellaSize").value = panSize;
-document.getElementById("persons").value = params.get("p") || 6;
-calculate();
+  const params = new URLSearchParams(window.location.search);
+  const panSize = ratios[params.get("mp")] ? params.get("mp") : "70";
+  document.getElementById("paellaSize").value = panSize;
+  document.getElementById("persons").value = params.get("p") || 6;
+  calculate();
+}
+
+if (typeof document !== "undefined") initialize();
+if (typeof module !== "undefined") module.exports = { calculateIngredients };
