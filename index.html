@@ -1,51 +1,100 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ca">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon">
-<link rel="icon" href="/images/favicon.png" type="image/x-icon">
-<title>Calculadora de Paella de marisc</title>
-<!-- Tailwind CSS -->
-<link href="./css/tailwind.output.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
+    <title>Paella a punt | Calculadora de marisc</title>
+    <link href="./css/tailwind.output.css" rel="stylesheet" />
+  </head>
+  <body class="min-h-screen bg-[#fff8ed] text-stone-900 antialiased">
+    <main class="mx-auto max-w-6xl px-4 py-5 sm:px-6 sm:py-8 lg:px-8">
+      <section class="overflow-hidden rounded-[2rem] bg-stone-900 shadow-2xl shadow-orange-950/20">
+        <div class="relative overflow-hidden px-6 py-8 sm:px-10 sm:py-12">
+          <div class="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-orange-400/20 blur-3xl"></div>
+          <div class="absolute -bottom-24 left-1/3 h-52 w-52 rounded-full bg-amber-300/10 blur-3xl"></div>
+          <div class="relative max-w-2xl">
+            <p class="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-amber-300">
+              <span class="h-px w-8 bg-amber-300"></span>
+              Paella de marisc
+            </p>
+            <h1 class="font-serif text-4xl font-semibold leading-none text-white sm:text-6xl">Tot a punt per fer una gran paella.</h1>
+            <p class="mt-5 max-w-xl text-base leading-7 text-stone-300 sm:text-lg">Escull la paellera i les racions. Et calculem la compra sense fer números de cap.</p>
+          </div>
+          <div class="relative mt-8 flex flex-wrap gap-3 text-sm text-stone-200">
+            <span class="rounded-full border border-white/15 bg-white/10 px-4 py-2">Proporcions ajustades</span>
+            <span class="rounded-full border border-white/15 bg-white/10 px-4 py-2">Llista per compartir</span>
+          </div>
+        </div>
+      </section>
 
-<div class="container max-w-xl mx-auto mt-10 mb-10 px-5">
-  <h1 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Calculadora de Paella de marisc</h1>
-  <div class="flex align-center justify-between gap-3">
+      <section class="relative -mt-4 mx-2 rounded-[1.5rem] border border-orange-100 bg-white p-5 shadow-xl shadow-orange-950/5 sm:mx-6 sm:p-7">
+        <div class="grid gap-7 lg:grid-cols-[1fr_1.35fr] lg:items-end">
+          <div>
+            <label for="paellaSize" class="text-sm font-bold text-stone-700">Diàmetre de la paellera</label>
+            <div class="mt-3 grid grid-cols-3 gap-2" role="group" aria-label="Diàmetre de la paellera">
+              <button type="button" class="pan-option rounded-xl border border-stone-200 px-3 py-3 text-center text-sm font-bold text-stone-600 transition hover:border-orange-400 hover:text-orange-700" data-size="50">50 cm</button>
+              <button type="button" class="pan-option rounded-xl border border-stone-200 px-3 py-3 text-center text-sm font-bold text-stone-600 transition hover:border-orange-400 hover:text-orange-700" data-size="60">60 cm</button>
+              <button type="button" class="pan-option rounded-xl border border-stone-200 px-3 py-3 text-center text-sm font-bold text-stone-600 transition hover:border-orange-400 hover:text-orange-700" data-size="70">70 cm</button>
+            </div>
+            <select id="paellaSize" name="paellaSize" class="sr-only">
+              <option value="50">50 cm</option>
+              <option value="60">60 cm</option>
+              <option value="70">70 cm</option>
+            </select>
+          </div>
 
-    <div class="w-100 w-full">
-      <label for="paellaSize" class="block mb-2 text-sm font-medium text-gray-700">Mida de la paellera:</label>
-      <select id="paellaSize" name="paellaSize" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 h-10">
-        <option value="70">70 cm</option>
-        <option value="60">60 cm</option>
-        <option value="50">50 cm</option>
-      </select>
-    </div>
+          <div>
+            <div class="flex items-center justify-between gap-4">
+              <label for="persons" class="text-sm font-bold text-stone-700">Per a quantes persones?</label>
+              <span class="text-xs font-medium text-stone-400">de 2 a 40 racions</span>
+            </div>
+            <div class="mt-3 flex items-center gap-3">
+              <button id="decreasePersons" type="button" class="grid h-12 w-12 shrink-0 place-items-center rounded-xl border border-stone-200 text-xl font-semibold text-stone-700 transition hover:border-orange-400 hover:bg-orange-50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2" aria-label="Restar una persona">−</button>
+              <input type="number" id="persons" name="persons" min="2" max="40" value="6" inputmode="numeric" class="h-12 w-full rounded-xl border border-stone-200 bg-stone-50 px-4 text-center text-lg font-bold text-stone-900 outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
+              <button id="increasePersons" type="button" class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-orange-600 text-xl font-semibold text-white shadow-lg shadow-orange-600/20 transition hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2" aria-label="Sumar una persona">+</button>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-2" aria-label="Racions habituals">
+              <button type="button" data-persons="4" class="person-preset rounded-full bg-stone-100 px-3 py-1.5 text-xs font-bold text-stone-600 transition hover:bg-orange-100 hover:text-orange-800">4 persones</button>
+              <button type="button" data-persons="6" class="person-preset rounded-full bg-stone-100 px-3 py-1.5 text-xs font-bold text-stone-600 transition hover:bg-orange-100 hover:text-orange-800">6 persones</button>
+              <button type="button" data-persons="10" class="person-preset rounded-full bg-stone-100 px-3 py-1.5 text-xs font-bold text-stone-600 transition hover:bg-orange-100 hover:text-orange-800">10 persones</button>
+              <button type="button" data-persons="15" class="person-preset rounded-full bg-stone-100 px-3 py-1.5 text-xs font-bold text-stone-600 transition hover:bg-orange-100 hover:text-orange-800">15 persones</button>
+            </div>
+          </div>
+        </div>
+      </section>
 
-    <div class="w-full">
-      <label for="persons" class="block mb-2 text-sm font-medium text-gray-700">Persones:</label>
-      <input type="number" id="persons" name="persons" min="6" value="6" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 h-10" />
-    </div>
-  </div>
+      <section class="mt-8 grid gap-4 sm:grid-cols-2">
+        <article class="rounded-2xl border border-amber-100 bg-amber-50 p-5">
+          <p class="text-xs font-bold uppercase tracking-[0.16em] text-amber-800">Arròs</p>
+          <p id="riceSummary" class="mt-2 font-serif text-3xl font-semibold text-stone-900">600 grams</p>
+          <p class="mt-1 text-sm text-stone-600">La base de la paella.</p>
+        </article>
+        <article class="rounded-2xl border border-sky-100 bg-sky-50 p-5">
+          <p class="text-xs font-bold uppercase tracking-[0.16em] text-sky-800">Fumet de peix</p>
+          <p id="stockSummary" class="mt-2 font-serif text-3xl font-semibold text-stone-900">2,70 litres</p>
+          <p class="mt-1 text-sm text-stone-600">Segons la mida de la paellera.</p>
+        </article>
+      </section>
 
+      <section class="mt-8 rounded-[1.5rem] border border-stone-200 bg-white p-5 sm:p-7">
+        <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.18em] text-orange-700">La teva compra</p>
+            <h2 class="mt-1 font-serif text-3xl font-semibold text-stone-900">Ingredients a punt</h2>
+            <p id="recipeSubtitle" class="mt-1 text-sm text-stone-500">Per a 6 persones amb paellera de 70 cm.</p>
+          </div>
+          <button id="shareButton" type="button" class="inline-flex items-center justify-center gap-2 rounded-xl bg-stone-900 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-stone-900/15 transition hover:bg-stone-700 focus:outline-none focus:ring-2 focus:ring-stone-900 focus:ring-offset-2">
+            <svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="m8.6 10.5 6.8-4"></path><path d="m8.6 13.5 6.8 4"></path></svg>
+            <span id="shareLabel">Compartir compra</span>
+          </button>
+        </div>
+        <ul id="recipeList" class="mt-6 grid gap-3 sm:grid-cols-2" aria-live="polite"></ul>
+      </section>
 
-  <div class="mt-5 mb-50">
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="text-xl sm:text-2xl font-semibold text-gray-800">Ingredients</h2>
-      <span id="shareButton" class="cursor-pointer">
-        <img src="images/share-icon.svg" alt="icona de comparteix" width="35px">
-      </span>
-    </div>
-    <ul id="recipeList" class="space-y-2 pb-50">
-      <!-- Recipe items will be populated here -->
-    </ul>
-  </div>
-</div>
-
-<script src="index.js"></script>
-
-</body>
+      <p class="py-8 text-center text-sm text-stone-500">Bon profit. Cuina sense presses.</p>
+    </main>
+    <script src="index.js"></script>
+  </body>
 </html>
